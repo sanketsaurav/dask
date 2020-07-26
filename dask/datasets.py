@@ -8,7 +8,7 @@ def timeseries(
     end="2000-01-31",
     freq="1s",
     partition_freq="1d",
-    dtypes={"name": str, "id": int, "x": float, "y": float},
+    dtypes=None,
     seed=None,
     **kwargs
 ):
@@ -51,6 +51,8 @@ def timeseries(
     ...     id_lam=1000  # control number of items in id column
     ... )
     """
+    if dtypes is None:
+        dtypes = {"name": str, "id": int, "x": float, "y": float}
     from dask.dataframe.io.demo import make_timeseries
 
     return make_timeseries(

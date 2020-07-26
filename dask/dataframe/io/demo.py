@@ -84,7 +84,7 @@ def make_timeseries_part(start, end, dtypes, freq, state_data, kwargs):
 def make_timeseries(
     start="2000-01-01",
     end="2000-12-31",
-    dtypes={"name": str, "id": int, "x": float, "y": float},
+    dtypes=None,
     freq="10s",
     partition_freq="1M",
     seed=None,
@@ -125,6 +125,8 @@ def make_timeseries(
     2000-01-01 06:00:00   960   Charlie  0.788245
     2000-01-01 08:00:00  1031     Kevin  0.466002
     """
+    if dtypes is None:
+        dtypes = {"name": str, "id": int, "x": float, "y": float}
     divisions = list(pd.date_range(start=start, end=end, freq=partition_freq))
     state_data = random_state_data(len(divisions) - 1, seed)
     name = "make-timeseries-" + tokenize(
