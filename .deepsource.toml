@@ -1,6 +1,9 @@
 version = 1
 
-test_patterns = ["dask/**/test_*.py"]
+test_patterns = [
+    "dask/**/test_*.py",
+    "dask/**/*_test.py"
+]
 
 exclude_patterns = [
     "continuous_integration/**",
