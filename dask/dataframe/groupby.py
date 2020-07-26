@@ -1081,9 +1081,13 @@ class _GroupBy(object):
         aggfunc=None,
         split_every=None,
         split_out=1,
-        chunk_kwargs={},
-        aggregate_kwargs={},
+        chunk_kwargs=None,
+        aggregate_kwargs=None,
     ):
+        if chunk_kwargs is None:
+            chunk_kwargs = {}
+        if aggregate_kwargs is None:
+            aggregate_kwargs = {}
         if aggfunc is None:
             aggfunc = func
 

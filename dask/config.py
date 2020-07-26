@@ -123,12 +123,14 @@ def merge(*dicts):
     return result
 
 
-def collect_yaml(paths=paths):
+def collect_yaml(paths=None):
     """ Collect configuration from yaml files
 
     This searches through a list of paths, expands to find all yaml or json
     files, and then parses each file.
     """
+    if paths is None:
+        paths = paths
     # Find all paths
     file_paths = []
     for path in paths:
@@ -291,7 +293,9 @@ class set(object):
     dask.config.get
     """
 
-    def __init__(self, arg=None, config=config, lock=config_lock, **kwargs):
+    def __init__(self, arg=None, config=None, lock=config_lock, **kwargs):
+        if config is None:
+            config = config
         with lock:
             self.config = config
             self._record = []
@@ -362,7 +366,7 @@ class set(object):
             self._assign(keys[1:], value, d[key], path, record=record)
 
 
-def collect(paths=paths, env=None):
+def collect(paths=None, env=None):
     """
     Collect configuration from paths and environment variables
 
@@ -382,6 +386,8 @@ def collect(paths=paths, env=None):
     --------
     dask.config.refresh: collect configuration and update into primary config
     """
+    if paths is None:
+        paths = paths
     if env is None:
         env = os.environ
 
@@ -391,7 +397,7 @@ def collect(paths=paths, env=None):
     return merge(*configs)
 
 
-def refresh(config=config, defaults=defaults, **kwargs):
+def refresh(config=None, defaults=None, **kwargs):
     """
     Update configuration by re-reading yaml files and env variables
 
@@ -415,6 +421,10 @@ def refresh(config=config, defaults=defaults, **kwargs):
     dask.config.collect: for parameters
     dask.config.update_defaults
     """
+    if config is None:
+        config = config
+    if defaults is None:
+        defaults = defaults
     config.clear()
 
     for d in defaults:
@@ -423,7 +433,7 @@ def refresh(config=config, defaults=defaults, **kwargs):
     update(config, collect(**kwargs))
 
 
-def get(key, default=no_default, config=config):
+def get(key, default=no_default, config=None):
     """
     Get elements from global config
 
@@ -445,6 +455,8 @@ def get(key, default=no_default, config=config):
     --------
     dask.config.set
     """
+    if config is None:
+        config = config
     keys = key.split(".")
     result = config
     for k in keys:
@@ -459,11 +471,13 @@ def get(key, default=no_default, config=config):
     return result
 
 
-def rename(aliases, config=config):
+def rename(aliases, config=None):
     """ Rename old keys to new keys
 
     This helps migrate older configuration versions over time
     """
+    if config is None:
+        config = config
     old = []
     new = {}
     for o, n in aliases.items():
@@ -478,7 +492,7 @@ def rename(aliases, config=config):
     set(new, config=config)
 
 
-def update_defaults(new, config=config, defaults=defaults):
+def update_defaults(new, config=None, defaults=None):
     """ Add a new set of defaults to the configuration
 
     It does two things:
@@ -487,6 +501,10 @@ def update_defaults(new, config=config, defaults=defaults):
     2.  Updates the global config with the new configuration
         prioritizing older values over newer ones
     """
+    if config is None:
+        config = config
+    if defaults is None:
+        defaults = defaults
     defaults.append(new)
     update(config, new, priority="old")
 
@@ -531,7 +549,7 @@ deprecations = {
 }
 
 
-def check_deprecations(key: str, deprecations: dict = deprecations):
+def check_deprecations(key: str, deprecations: dict = None):
     """ Check if the provided value has been renamed or removed
 
     Parameters
@@ -561,6 +579,8 @@ def check_deprecations(key: str, deprecations: dict = deprecations):
         The proper key, whether the original (if no deprecation) or the aliased
         value
     """
+    if deprecations is None:
+        deprecations = deprecations
     if key in deprecations:
         new = deprecations[key]
         if new:
