@@ -508,7 +508,7 @@ def get_engine(engine):
                 return get_engine(eng)
             except RuntimeError:
                 pass
-            
+
         raise RuntimeError("Please install either fastparquet or pyarrow")
 
     elif engine == "fastparquet":
