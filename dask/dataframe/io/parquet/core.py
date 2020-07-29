@@ -508,8 +508,8 @@ def get_engine(engine):
                 return get_engine(eng)
             except RuntimeError:
                 pass
-        else:
-            raise RuntimeError("Please install either fastparquet or pyarrow")
+            
+        raise RuntimeError("Please install either fastparquet or pyarrow")
 
     elif engine == "fastparquet":
         import_required("fastparquet", "`fastparquet` not installed")
