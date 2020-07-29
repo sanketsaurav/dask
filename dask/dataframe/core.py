@@ -5665,10 +5665,10 @@ def _take_last(a, skipna=True):
             val = s.iloc[-i]
             if not pd.isnull(val):
                 return val
-        else:
-            nonnull = s[s.notna()]
-            if not nonnull.empty:
-                return nonnull.iloc[-1]
+
+        nonnull = s[s.notna()]
+        if not nonnull.empty:
+            return nonnull.iloc[-1]
         return None
 
     if skipna is False:
